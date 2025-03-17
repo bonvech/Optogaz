@@ -16,21 +16,21 @@ class Optogaz_device:
         self.bot_flag = True ## 
         self.test_mode = False
         
-        self.telebot_config_token   = telebot_config.token
-        self.telebot_config_channel = telebot_config.channel
+        self.telebot_token   = telebot_config.token
+        self.telebot_channel = telebot_config.channel
         
         self.device_name = None
 
         ## for data files
-        #self.workdir = "."       ## work directory name
         self.datadir = "."       ## data directory name
-        self.datafilename   = '_optogaz_data.csv'
-        self.logfilename    = '_optogaz_log.txt'
         self.datafilename_suff   = '_data.csv'
         self.logfilename_suff    = '_log.txt'
-        self.configfilename  = "optogaz_config.py"
+        self.datafilename    = '_optogaz_data.csv'
+        self.logfilename     = '_optogaz_log.txt'
+        
         self.datafile_header = "datatime;timestamp;DevDatetime;CO [ppm];CO2 [ppm]"
     
+        self.configfilename  = "optogaz_config.py"
         ##  COM port properties
         self.portName = 'COM3'
         self.BPS      = 9600
@@ -140,58 +140,36 @@ class Optogaz_device:
             self.print_message(text)
 
 
-    ##  ----------------------------------------------------------------
-    ## Write to log file with time
-    ##  ----------------------------------------------------------------
-    def write_log(self, text):
-        # get time
-        timenow = datetime.now()
-        timenow = str(timenow)
-        
-        # open log file
-        flog = open(self.logfilename, 'a') 
-        
-        # write to logfile
-        text = timenow + ": " + text 
-        flog.write(text + '\n')
-        if self.verbose:
-            print(text)
-        
-        # close log file
-        flog.close()
-
-
     ## ----------------------------------------------------------------
     ##  Print message to logfile
     ## ----------------------------------------------------------------
     def print_message(self, message, end=''):
-        ## print to screen
-        print(message)
+        text = f"{str(datetime.now()).split('.')[0]}: {message}{end}"
+        
+        ##  print to screen
+        if self.verbose:
+            print(text)  
 
-        ## write to logfile
-        if message[-1] != '\n' and end != '\n':
-            message += '\n'
-        #sep = self.get_separator()
-        #if not logdirname.endswith(sep):  logdirname += sep
-        logfilename = self.logdirname + "_".join(["_".join(str(datetime.now()).split('-')[:2]), 
-                                                 self.device_name,  'log.txt'])
-        with open(logfilename,'a') as flog:
-            flog.write(f"{datetime.now()}:  {message}{end}")
+        ##  write to log file
+        if not text.endswith('\n'):
+            text += '\n'
+        with open(self.logfilename,'a') as flog:
+            flog.write(text)
 
 
     ## ----------------------------------------------------------------
     ##  write message to bot
     ## ----------------------------------------------------------------
     def write_to_bot(self, text):
-        text = f"{self.hostname} ({self.local_ip}): {text}"
+        text = f"{self.hostname} ({self.local_ip}): {self.device_name}: {text}"
         if not self.test_mode:
             try:
-                bot = telebot.TeleBot(self.telebot_config_token, parse_mode=None)
-                bot.send_message(self.telebot_config_channel, text)
+                bot = telebot.TeleBot(self.telebot_token, parse_mode=None)
+                bot.send_message(self.telebot_channel, text)
                 self.print_message(text)
             except Exception as err:
                 ##  напечатать строку ошибки
-                text = f": ERROR in writing to bot: {err}"
+                text = f": ERROR in writing {text} to bot: {err}"
                 self.print_message(text)  ## write to log file
         else:
             self.print_message(text)        
@@ -286,19 +264,19 @@ class Optogaz_device:
                     #timeout  = self.timeout
                     )
         except Exception as err: ##  напечатать строку ошибки
-            text = f"{self.device_name}: ERROR in {self.portName} connect(): {err}" 
-            self.write_log(text)  ## write to log file
+            text = f"ERROR in {self.portName} connect(): {err}" 
+            self.print_message(text)  ## write to log file
             #self.write_bot(text)
             return -1 ## Error in opening
         
         ##  Check result of opening
         try:
             if (self.ser.isOpen()):
-                text = f"{self.device_name}: {self.portName} port open success"
+                text = f"{self.portName} port open success"
                 self.write_to_bot(text)
         except Exception as err:
-            text = f"{self.device_name}: ERROR: {self.portName} port open failed: {err}" 
-            self.write_log(text)  ## write to log file
+            text = f"ERROR: {self.portName} port open failed: {err}" 
+            self.print_message(text)  ## write to log file
             return -2  ## Error in checking
         
         return 0  ## OK          
@@ -327,7 +305,7 @@ class Optogaz_device:
         except Exception as err:
             ##  напечатать строку ошибки
             text = f"ERROR in serial port reading: {err}"
-            self.write_log(text)  ## write to log file
+            self.print_message(text)  ## write to log file
             return 1
        
         ##  read data to dataline
@@ -340,7 +318,7 @@ class Optogaz_device:
             except Exception as err:
                 ##  напечатать строку ошибки
                 text = f": ERROR in serial reading: {err}"
-                self.write_log(text)  ## write to log file  
+                self.print_message(text)  ## write to log file  
             ##  decode 
             if (line):
                 try:
@@ -349,11 +327,11 @@ class Optogaz_device:
                 except Exception as err:               
                     ##  напечатать ошибочный байт                  
                     text = f"Cant decode byte: {str(ord(line))} from ||{str(line)}||-"
-                    self.write_log(text)  ## write to log file
+                    self.print_message(text)  ## write to log file
                 line = ""
             else:  ## невозможное условие
                 text = "Error: no line in read() in request() :: is open failed. Происходит что-то ужасное!\n"
-                #self.write_log(text)  ## write to log file
+                #self.print_message(text)  ## write to log file
                 self.write_to_bot(text)
                 break
         
