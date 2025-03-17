@@ -1,0 +1,27 @@
+2025-03-16 22:26:33.907821: Optogaz: COM3 port open success
+2025-03-16 22:32:02.036431: Optogaz: COM3 port open success
+2025-03-16 22:33:18.524094: Optogaz: COM3 port open success
+2025-03-16 22:33:18.524094: Optogaz: ERROR: COM3 port open failed: 'Optogaz_device' object has no attribute 'hostname'
+2025-03-16 22:38:08.634990: Optogaz: COM3 port open success
+2025-03-16 22:38:08.634990: Optogaz: ERROR: COM3 port open failed: 'Optogaz_device' object has no attribute 'test_mode'
+2025-03-16 22:39:30.169032: Optogaz: COM3 port open success
+2025-03-16 22:39:30.169032: Optogaz: ERROR: COM3 port open failed: 'Optogaz_device' object has no attribute 'logdirname'
+2025-03-16 22:45:04.319088: Optogaz: COM3 port open success
+2025-03-16 22:46:35.076838: Optogaz: COM3 port open success
+2025-03-16 22:46:35.535254: Optogaz: ERROR: COM3 port open failed: [Errno 2] No such file or directory: 'data\\log\\2025_03_Optogaz_log.txt'
+2025-03-16 22:48:08.137826: Optogaz: COM3 port open success
+2025-03-16 22:49:58.929262: Optogaz: ERROR in COM3 connect(): could not open port 'COM3': PermissionError(13, 'РћС‚РєР°Р·Р°РЅРѕ РІ РґРѕСЃС‚СѓРїРµ.', None, 5)
+2025-03-16 22:50:10.024167: Optogaz: COM3 port open success
+2025-03-16 22:51:24.179041: Optogaz: COM3 port open success
+2025-03-16 22:48:08.620539:  Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-16 22:50:10.483193:  Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-16 22:51:24.641405:  Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-17 01:42:04.825472:  Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-17 02:23:38.430601: Optogaz: ERROR in COM3 connect(): could not open port 'COM3': PermissionError(13, 'Отказано в доступе.', None, 5)
+2025-03-17 02:26:24.046706: Optogaz: ERROR in COM3 connect(): could not open port 'COM3': PermissionError(13, 'Отказано в доступе.', None, 5)
+2025-03-17 02:44:41.483783: Optogaz: COM3 port open success
+2025-03-17 02:44:41.906770:  Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-17 10:05:40.010556: Optogaz: COM3 port open success
+2025-03-17 10:05:40.545547:  Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-17 10:40:06.753007:  Serv (192.168.1.82): New file 2025_03_optogaz_data.csv created
+2025-03-17 10:40:06.856540:  Serv (192.168.1.82): Optogaz: COM3 port open success
