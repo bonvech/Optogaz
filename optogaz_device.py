@@ -16,21 +16,10 @@ class Optogaz_device:
         self.bot_flag = True ## 
         self.test_mode = False
         
+        ##  telegram config
         self.telebot_token   = telebot_config.token
-        self.telebot_channel = telebot_config.channel
+        self.telebot_channel = telebot_config.channel  
         
-        self.device_name = None
-
-        ## for data files
-        self.datadir = "."       ## data directory name
-        self.datafilename_suff   = '_data.csv'
-        self.logfilename_suff    = '_log.txt'
-        self.datafilename    = '_optogaz_data.csv'
-        self.logfilename     = '_optogaz_log.txt'
-        
-        self.datafile_header = "datatime;timestamp;DevDatetime;CO [ppm];CO2 [ppm]"
-    
-        self.configfilename  = "optogaz_config.py"
         ##  COM port properties
         self.portName = 'COM3'
         self.BPS      = 9600
@@ -43,14 +32,28 @@ class Optogaz_device:
         ##  run init procedures
         self.get_separator()
         self.get_local_ip()
+        
+        ##  read config file
+        self.device_name = None
+        self.datadir = "."       ## data directory name
+        self.configfilename  = "optogaz_config.py"
         if self.read_config_file(): 
             sys.exit(10)  ## errors in read config file
-        
         if self.verbose:
             self.print_params()
         
+        ##  for data files
+        self.datafilename_suff   = '_data.csv'
+        self.logfilename_suff    = '_log.txt'
+        self.rawfilename_suff    = '_raw.txt'
+        self.datafilename    = '_optogaz_data.csv'
+        self.logfilename     = '_optogaz_log.txt'
+        self.rawfilename     = '_optogaz_raw.txt'
+        self.datafile_header = "datatime;timestamp;DevDatetime;CO [ppm];CO2 [ppm]"   
+        
         ##  prepare dirs and files for data and logs        
         self.logdirname    = f"{self.datadir}{self.sep}log{self.sep}"
+        self.rawdirname    = f"{self.datadir}{self.sep}raw{self.sep}"
         self.tabledirname  = f"{self.datadir}{self.sep}table{self.sep}"
         self.prepare_dirs()
     
@@ -60,7 +63,7 @@ class Optogaz_device:
     ##   Make dirs and filenames to save data
     ##  ----------------------------------------------------------------
     def prepare_dirs(self):
-        dirs = [self.datadir, self.tabledirname, self.logdirname]
+        dirs = [self.datadir, self.tabledirname, self.logdirname, self.rawdirname]
         for path in dirs:
             if not os.path.exists(path):   
                 os.system("mkdir " + path)
@@ -79,6 +82,7 @@ class Optogaz_device:
 
         if ((timestamp in self.datafilename) and 
             (timestamp in self.logfilename) and
+            (timestamp in self.rawfilename) and
             (self.device_name.split()[0].lower() in self.datafilename)
             ):
             return True  ##  OK -
@@ -99,6 +103,9 @@ class Optogaz_device:
         ##  name for log files
         self.logfilename = f"{self.logdirname}{timestamp}_{devicename}{self.logfilename_suff}"
         
+        ##  name for raw files
+        self.rawfilename = f"{self.rawdirname}{timestamp}_{devicename}{self.rawfilename_suff}"
+        
         ##  name for data files
         self.datafilename = f"{self.tabledirname}{timestamp}_{devicename}{self.datafilename_suff}"
         ##  create data file
@@ -112,6 +119,7 @@ class Optogaz_device:
         if self.verbose:
             print(self.datafilename)
             print(self.logfilename)
+            print(self.rawfilename)
 
 
     ## ----------------------------------------------------------------
@@ -120,7 +128,6 @@ class Optogaz_device:
     def get_local_ip(self):
         self.hostname = socket.gethostname()
         self.local_ip = socket.gethostbyname(self.hostname)
-        #return hostname, local_ip
 
 
     ## ----------------------------------------------------------------
@@ -198,7 +205,7 @@ class Optogaz_device:
                 print("--------------------------------------------")
         except:
             pass
-            
+        
         #self.write_config_file()
 
 
@@ -233,7 +240,7 @@ class Optogaz_device:
     ##  Print params 
     ##  ----------------------------------------------------------------
     def print_params(self):
-        print("Directory for DATA:   ", self.datadir)
+        print("Directory for DATA: ", self.datadir)
         print("portName = ", self.portName)
         print("BPS = ",      self.BPS)
         print("STOBITS = ",  self.STOPBITS)
@@ -298,7 +305,6 @@ class Optogaz_device:
     ##  ----------------------------------------------------------------
     def request(self):
         #time.sleep(20)
-       
         ##  read byte number of data in port
         try:
             n = self.ser.in_waiting
@@ -336,7 +342,11 @@ class Optogaz_device:
                 break
         
         if len(dataline) < 10:
-            return        
+            return  
+
+        ##  write dataline to raw file
+        with open(self.rawfilename, 'a') as fraw:
+            fraw.write(dataline) 
 
         ##  replace spaces
         dataline = dataline.replace('\r', '')
@@ -351,11 +361,9 @@ class Optogaz_device:
             self.create_filenames()
         
         ## write dataline to datafile
-        if len(dataline) > 1: ## Чтобы не писать пустые строки с b'\x00' и b'\xfe'
-            print(dataline)
-            fdata = open(self.datafilename, 'a')
+        print(dataline)
+        with open(self.datafilename, 'a') as fdata:
             fdata.write(dataline) 
-            fdata.close()
 
 
     ##  ----------------------------------------------------------------
