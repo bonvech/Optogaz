@@ -344,13 +344,17 @@ class Optogaz_device:
         if len(dataline) < 10:
             return  
 
+        dataline = dataline.replace('\r', '')
+        
         ##  write dataline to raw file
         with open(self.rawfilename, 'a') as fraw:
             fraw.write(dataline) 
 
+        ##  select one record
+        dataline = [record for record in dataline.strip().split("\n") if len(record) >=30][-1]
+        
         ##  replace spaces
-        dataline = dataline.replace('\r', '')
-        dataline = ";".join(dataline.strip().split("\n")[-1].strip().split())
+        dataline = ";".join(dataline.strip().split())
         dataline = dataline.replace(';', ' ', 1)
         
         ##  add timestamp and current datetime to dataline
