@@ -366,8 +366,12 @@ class Optogaz_device:
         
         ## write dataline to datafile
         print(dataline)
-        with open(self.datafilename, 'a') as fdata:
-            fdata.write(dataline) 
+        try:
+            with open(self.datafilename, 'a') as fdata:
+                fdata.write(dataline) 
+        except Exception as error:
+            self.write_to_bot(f"{self.device_name}: Error in file writing: {error}.")
+
 
 
     ##  ----------------------------------------------------------------
