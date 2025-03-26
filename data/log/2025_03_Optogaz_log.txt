@@ -25,3 +25,17 @@
 2025-03-17 10:05:40.545547:  Serv (192.168.1.82): Optogaz: COM3 port open success
 2025-03-17 10:40:06.753007:  Serv (192.168.1.82): New file 2025_03_optogaz_data.csv created
 2025-03-17 10:40:06.856540:  Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-17 12:25:08: Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-17 12:39:31: Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-17 12:39:41: ERROR in COM3 connect(): could not open port 'COM3': PermissionError(13, 'Отказано в доступе.', None, 5)
+2025-03-18 19:42:20: Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-18 19:55:20: Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-19 23:36:32: Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-19 23:45:31: Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-19 23:46:33: Serv (192.168.1.82): Optogaz: Optogaz: Error in main programm: name 'record' is not defined
+2025-03-19 23:47:46: Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-20 00:10:41: ERROR in COM3 connect(): could not open port 'COM3': PermissionError(13, 'Отказано в доступе.', None, 5)
+2025-03-21 12:31:13: Serv (192.168.1.82): Optogaz: Optogaz: Error in main programm: [Errno 13] Permission denied: 'data\\table\\2025_03_optogaz_data.csv'
+2025-03-22 19:56:18: Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-23 02:35:24: Serv (192.168.1.82): Optogaz: COM3 port open success
+2025-03-24 01:30:14: Serv (192.168.1.82): Optogaz: COM3 port open success

@@ -49,14 +49,14 @@ class Optogaz_device:
         self.datafilename    = '_optogaz_data.csv'
         self.logfilename     = '_optogaz_log.txt'
         self.rawfilename     = '_optogaz_raw.txt'
-        self.datafile_header = "datatime;timestamp;DevDatetime;CO [ppm];CO2 [ppm]"   
+        self.datafile_header = "datetime;timestamp;DevDatetime;CO [ppm];CO2 [ppm]"   
         
         ##  prepare dirs and files for data and logs        
         self.logdirname    = f"{self.datadir}{self.sep}log{self.sep}"
         self.rawdirname    = f"{self.datadir}{self.sep}raw{self.sep}"
         self.tabledirname  = f"{self.datadir}{self.sep}table{self.sep}"
         self.prepare_dirs()
-    
+
 
     ##  ----------------------------------------------------------------  
     ##  ----------------------------------------------------------------
@@ -76,7 +76,7 @@ class Optogaz_device:
     ##   Check output filenames content current month
     ##  ----------------------------------------------------------------
     def filenames_are_ok(self):
-        ## get current datatime
+        ## get current datetime
         tt = datetime.now()
         timestamp = f"{tt.year}_{tt.month:02}"
 
@@ -94,7 +94,7 @@ class Optogaz_device:
     ##   Create filenames to save data
     ##  ----------------------------------------------------------------
     def create_filenames(self):
-        ## get current datatime
+        ## get current datetime
         tt = datetime.now()
         timestamp = f"{tt.year}_{tt.month:02}"
           
@@ -214,7 +214,7 @@ class Optogaz_device:
     ## ----------------------------------------------------------------
     def write_config_file(self):
         ##  rename current config file
-        tt = datetime.now() ## get current datatime
+        tt = datetime.now() ## get current datetime
         timestamp = f"{tt.year}{tt.month:02}{tt.day:02}_{tt.hour:02}{tt.minute:02}"
         os.system(f"copy {self.configfilename} {self.configfilename}_{timestamp}")
                 

@@ -21,4 +21,4 @@ try:
     device.unconnect()
     device.write_to_bot(f"{device.device_name}: Miracle! The undless while stopped!")
 except Exception as error:
-    device.write_to_bot(f"{device.device_name}: Final Error in main programm: {error}. The programm stopped. Start new programm!")
+    device.write_to_bot(f"{device.device_name}: Final Error in main programm: {error}. The programm stopped. Start new programm now!")
